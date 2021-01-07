@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Jansen from '../assets/jansen.JPG';
+import Background from '../assets/background.jpg';
 
 class Header extends Component {
     render() {
@@ -7,15 +9,27 @@ class Header extends Component {
             <div>
                 <nav className="blue">
                     <div className="container nav-wrapper">
-                        <Link to="/" className="brand-logo">Simple React PWA</Link>
-                        <a href="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
+                        <Link to="/" className="brand-logo">React PWA</Link>
+                        <a href="!#" data-target="side-menu" className="sidenav-trigger"><i className="material-icons">menu</i></a>
                         <ul className="right hide-on-med-and-down">
+                            <li><Link to="/">Home</Link></li>
                             <li><Link to="/about">About</Link></li>
                             <li><Link to="/detail">Detail</Link></li>
                         </ul>
                     </div>
                 </nav>
-                <ul className="sidenav" id="mobile-demo">
+                <ul className="sidenav side-nav" id="side-menu">
+                    <li>
+                        <div className="user-view">
+                            <div className="background">
+                                <img src={Background} alt="Background" style={{ width: "100%" }} />
+                            </div>
+                            <p><img className="circle" src={Jansen} alt="Jansen" /></p>
+                            <p><span className="white-text name">Jansen Manuel</span></p>
+                            <p><span className="white-text email">jansenmanuel010702@gmail.com</span></p>
+                        </div>
+                    </li>
+                    <li><Link to="/">Home</Link></li>
                     <li><Link to="/about">About</Link></li>
                     <li><Link to="/detail">Detail</Link></li>
                 </ul>
