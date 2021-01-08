@@ -29,7 +29,7 @@ self.addEventListener('fetch', event => {
             return caches.open(dynamicCacheName).then(cache => {
                 cache.put(event.request.url, dynamicRes.clone())
                 // check cached items size
-                limitCacheSize(dynamicCacheName, 255);
+                limitCacheSize(dynamicCacheName, 10);
                 return dynamicRes
             })
         }).catch(function () {

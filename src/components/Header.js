@@ -15,7 +15,6 @@ class Header extends Component {
                             <ul className="right hide-on-med-and-down">
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About</Link></li>
-                                <li><Link to="/detail">Detail</Link></li>
                             </ul>
                         </div>
                     </nav>
@@ -33,7 +32,6 @@ class Header extends Component {
                     </li>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/about">About</Link></li>
-                    <li><Link to="/detail">Detail</Link></li>
                 </ul>
             </div>
         );

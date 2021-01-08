@@ -6,6 +6,7 @@ import firebase from '../util/firebase';
 class Employee extends Component {
     constructor(props) {
         super(props);
+        this.ref = firebase.firestore().collection('Employee');
         this.state = {
             employee: [],
             id: '',
@@ -17,44 +18,99 @@ class Employee extends Component {
     }
 
     getDataEmployee = () => {
-        const employeeRef = firebase.database().ref('Employee');
-        employeeRef.on('value', snapshot => {
-            const employees = snapshot.val();
-            const employeeList = [];
-            for (let id in employees) {
-                employeeList.push({ id, ...employees[id] })
-            }
-            this.setState({
-                employee: employeeList
+        // const employeeRef = firebase.database().ref('Employee');
+        // employeeRef.on('value', snapshot => {
+        //     const employees = snapshot.val();
+        //     const employeeList = [];
+        //     for (let id in employees) {
+        //         employeeList.push({ id, ...employees[id] })
+        //     }
+        //     this.setState({
+        //         employee: employeeList
+        //     });
+        // })
+
+        // this.ref.get().then(snapshot => {
+        //     const employee = []
+        //     snapshot.forEach(childSnapshot => {
+        //         let id = childSnapshot.id;
+        //         let data = childSnapshot.data();
+
+        //         employee.push({ id: id, name: data.name, job: data.job, phone: data.phone });
+        //     });
+        //     this.setState({ employee })
+        // })
+
+        this.ref.onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    const data = change.doc.data()
+                    data.id = change.doc.id
+                    this.setState({
+                        employee: [...this.state.employee, data]
+                    })
+                }
+                if (change.type === 'modified') {
+                    const results = this.state.employee.map(item => {
+                        if (item.id === change.doc.id) {
+                            let data = { ...item, ...change.doc.data() }
+                            return data
+                        }
+                        return item
+                    })
+                    this.setState({
+                        employee: results
+                    })
+                }
+                if (change.type === 'removed') {
+                    this.setState({
+                        employee: this.state.employee.filter(item => item.id !== change.doc.id)
+                    })
+                }
             });
         })
     }
 
     postDataEmployee = () => {
-        const employeeRef = firebase.database().ref('Employee');
-        const employee = {
-            name: this.state.name,
-            job: this.state.job,
-            phone: this.state.phone,
-        };
-        employeeRef.push(employee);
-        window.M.toast({ html: 'Successful Add New Employee!' })
-    }
+        // const employeeRef = firebase.database().ref('Employee');
+        // const employee = {
+        //     name: this.state.name,
+        //     job: this.state.job,
+        //     phone: this.state.phone,
+        // };
+        // employeeRef.push(employee);
+        // window.M.toast({ html: 'Successful Add New Employee!' })
 
-    putDataEmployee = () => {
-        const employeeRef = firebase.database().ref('Employee').child(this.state.id);
-        employeeRef.update({
+        this.ref.add({
             name: this.state.name,
             job: this.state.job,
             phone: this.state.phone,
         })
-        window.M.toast({ html: 'Successful Update Employee!' })
+    }
+
+    putDataEmployee = () => {
+        // const employeeRef = firebase.database().ref('Employee').child(this.state.id);
+        // employeeRef.update({
+        //     name: this.state.name,
+        //     job: this.state.job,
+        //     phone: this.state.phone,
+        // })
+        // window.M.toast({ html: 'Successful Update Employee!' })
+
+        const updateEmployee = this.ref.doc(this.state.id);
+        updateEmployee.set({
+            name: this.state.name,
+            job: this.state.job,
+            phone: this.state.phone,
+        })
     }
 
     deleteDataEmployee = id => {
-        const employeeRef = firebase.database().ref('Employee').child(id);
-        employeeRef.remove();
-        window.M.toast({ html: 'Successful Delete Employee!' })
+        // const employeeRef = firebase.database().ref('Employee').child(id);
+        // employeeRef.remove();
+        // window.M.toast({ html: 'Successful Delete Employee!' })
+
+        this.ref.doc(id).delete()
     }
 
     componentDidMount() {
@@ -121,13 +177,6 @@ class Employee extends Component {
                                 <p>{employee.job}</p>
                                 <p>{employee.phone}</p>
                                 <p className="secondary-content">
-                                    <i
-                                        className="material-icons"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => this.handleDetail(employee.id)}
-                                    >
-                                        info
-                                    </i>
                                     <i
                                         className="material-icons sidenav-trigger"
                                         style={{ cursor: "pointer" }}
