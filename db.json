@@ -1,46 +1,10 @@
 {
   "employee": [
     {
-      "id": 1610005859720,
-      "name": "Muhammad Ihsan Aryandi",
-      "job": "Back-end Developer",
-      "phone": "088229303358"
-    },
-    {
-      "id": 1610005884052,
-      "name": "Rizki Ramadhan",
-      "job": "Back-end Developer",
-      "phone": "085156863608"
-    },
-    {
-      "id": 1610005911078,
-      "name": "Muhammad Bagas Fadillah",
-      "job": "Back-end Developer",
-      "phone": "08812279385"
-    },
-    {
-      "id": 1610005938569,
-      "name": "Felix",
-      "job": "Back-end Developer",
-      "phone": "081294166971"
-    },
-    {
-      "id": 1610007225971,
-      "name": "Bagus Yatma Pratama",
-      "job": "Front-end Developer",
-      "phone": "087741714725"
-    },
-    {
-      "id": 1610008617575,
+      "id": 1610117818909,
       "name": "Jansen Manuel",
       "job": "Front-end Developer",
       "phone": "081317919123"
-    },
-    {
-      "id": 1610068778573,
-      "name": "Samuel Marsellino",
-      "job": "Back-end Developer",
-      "phone": "085155087716"
     }
   ]
 }

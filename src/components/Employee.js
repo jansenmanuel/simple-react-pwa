@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import Loader from './Loader';
 import firebase from '../util/firebase';
+// import API from '../services';
 
 class Employee extends Component {
     constructor(props) {
@@ -18,99 +18,160 @@ class Employee extends Component {
     }
 
     getDataEmployee = () => {
-        // const employeeRef = firebase.database().ref('Employee');
-        // employeeRef.on('value', snapshot => {
-        //     const employees = snapshot.val();
-        //     const employeeList = [];
-        //     for (let id in employees) {
-        //         employeeList.push({ id, ...employees[id] })
-        //     }
-        //     this.setState({
-        //         employee: employeeList
-        //     });
+        // JSON-Server
+        // API.getDataEmployee().then(res => {
+        //     const employee = res.data;
+        //     this.setState({ employee });
         // })
 
-        // this.ref.get().then(snapshot => {
-        //     const employee = []
-        //     snapshot.forEach(childSnapshot => {
-        //         let id = childSnapshot.id;
-        //         let data = childSnapshot.data();
-
-        //         employee.push({ id: id, name: data.name, job: data.job, phone: data.phone });
-        //     });
-        //     this.setState({ employee })
-        // })
-
-        this.ref.onSnapshot(snapshot => {
-            snapshot.docChanges().forEach(change => {
-                if (change.type === 'added') {
-                    const data = change.doc.data()
-                    data.id = change.doc.id
-                    this.setState({
-                        employee: [...this.state.employee, data]
-                    })
-                }
-                if (change.type === 'modified') {
-                    const results = this.state.employee.map(item => {
-                        if (item.id === change.doc.id) {
-                            let data = { ...item, ...change.doc.data() }
-                            return data
-                        }
-                        return item
-                    })
-                    this.setState({
-                        employee: results
-                    })
-                }
-                if (change.type === 'removed') {
-                    this.setState({
-                        employee: this.state.employee.filter(item => item.id !== change.doc.id)
-                    })
-                }
+        // Firebase - Realtime Database
+        const employeeRef = firebase.database().ref('Employee');
+        employeeRef.on('value', snapshot => {
+            const employees = snapshot.val();
+            const employeeList = [];
+            for (let id in employees) {
+                employeeList.push({ id, ...employees[id] });
+            }
+            this.setState({
+                employee: employeeList
             });
         })
+
+        // Firebase - Cloud Firestore
+        // this.ref.onSnapshot(snapshot => {
+        //     snapshot.docChanges().forEach(change => {
+        //         if (change.type === 'added') {
+        //             const data = change.doc.data()
+        //             data.id = change.doc.id
+        //             this.setState({
+        //                 employee: [...this.state.employee, data]
+        //             })
+        //         }
+        //         if (change.type === 'modified') {
+        //             const results = this.state.employee.map(item => {
+        //                 if (item.id === change.doc.id) {
+        //                     let data = { ...item, ...change.doc.data() }
+        //                     return data
+        //                 }
+        //                 return item
+        //             })
+        //             this.setState({
+        //                 employee: results
+        //             })
+        //         }
+        //         if (change.type === 'removed') {
+        //             this.setState({
+        //                 employee: this.state.employee.filter(item => item.id !== change.doc.id)
+        //             })
+        //         }
+        //     });
+        // })
     }
 
     postDataEmployee = () => {
-        // const employeeRef = firebase.database().ref('Employee');
-        // const employee = {
-        //     name: this.state.name,
-        //     job: this.state.job,
-        //     phone: this.state.phone,
-        // };
-        // employeeRef.push(employee);
-        // window.M.toast({ html: 'Successful Add New Employee!' })
+        // JSON-Server
+        // API.postDataEmployee(employee).then(res => {
+        //     console.log(res);
+        //     this.getDataEmployee();
+        //     this.setState({
+        //         name: '',
+        //         job: '',
+        //         phone: ''
+        //     });
+        //     window.M.toast({ html: 'Successful Add New Employee!' });
+        // }).catch(() => {
+        //     window.M.toast({ html: "Sorry, You're Offline!" });
+        // })
 
-        this.ref.add({
+        // Firebase - Realtime Database
+        const employeeRef = firebase.database().ref('Employee');
+        const employee = {
             name: this.state.name,
             job: this.state.job,
             phone: this.state.phone,
+        };
+        employeeRef.push(employee).then(() => {
+            window.M.toast({ html: 'Successful Add New Employee!' });
+        }).catch(() => {
+            window.M.toast({ html: "Sorry, You're Offline!" });
         })
+
+        // Firebase - Cloud Firestore
+        // this.ref.add({
+        //     name: this.state.name,
+        //     job: this.state.job,
+        //     phone: this.state.phone,
+        // }).then(() => {
+        //     window.M.toast({ html: 'Successful Add New Employee!' });
+        // }).catch(() => {
+        //     window.M.toast({ html: "Sorry, You're Offline!" });
+        // })
     }
 
     putDataEmployee = () => {
-        // const employeeRef = firebase.database().ref('Employee').child(this.state.id);
-        // employeeRef.update({
-        //     name: this.state.name,
-        //     job: this.state.job,
-        //     phone: this.state.phone,
+        // JSON-Server
+        // API.putDataEmployee(employee, employee.id).then(res => {
+        //     console.log(res);
+        //     this.getDataEmployee();
+        //     this.setState({
+        //         name: '',
+        //         job: '',
+        //         phone: ''
+        //     });
+        //     window.M.toast({ html: 'Successful Update Employee!' });
+        // }).catch(() => {
+        //     window.M.toast({ html: "Sorry, You're Offline!" });
         // })
-        // window.M.toast({ html: 'Successful Update Employee!' })
 
-        const updateEmployee = this.ref.doc(this.state.id);
-        updateEmployee.set({
+        // Firebase - Realtime Database
+        const employeeRef = firebase.database().ref('Employee').child(this.state.id);
+        employeeRef.update({
             name: this.state.name,
             job: this.state.job,
             phone: this.state.phone,
+        }).then(() => {
+            window.M.toast({ html: 'Successful Update Employee!' })
+        }).catch(() => {
+            window.M.toast({ html: "Sorry, You're Offline!" })
         })
+
+        // Firebase - Cloud Firestore
+        // const updateEmployee = this.ref.doc(this.state.id);
+        // updateEmployee.set({
+        //     name: this.state.name,
+        //     job: this.state.job,
+        //     phone: this.state.phone,
+        // }).then(() => {
+        //     window.M.toast({ html: 'Successful Update Employee!' })
+        // }).catch(() => {
+        //     window.M.toast({ html: "Sorry, You're Offline!" })
+        // })
     }
 
     deleteDataEmployee = id => {
-        // const employeeRef = firebase.database().ref('Employee').child(id);
-        // employeeRef.remove();
-        // window.M.toast({ html: 'Successful Delete Employee!' })
+        // JSON-Server
+        // API.deleteDataEmployee(id).then(res => {
+        //     console.log(res);
+        //     this.getDataEmployee();
+        //     window.M.toast({ html: 'Successful Delete Employee!' });
+        // }).catch(() => {
+        //     window.M.toast({ html: "Sorry, You're Offline!" })
+        // })
 
-        this.ref.doc(id).delete()
+        // Firebase - Realtime Database
+        const employeeRef = firebase.database().ref('Employee').child(id);
+        employeeRef.remove().then(() => {
+            window.M.toast({ html: 'Successful Delete Employee!' })
+        }).catch(() => {
+            window.M.toast({ html: "Sorry, You're Offline!" })
+        })
+
+        // Firebase - Cloud Firestore
+        // this.ref.doc(id).delete().then(() => {
+        //         window.M.toast({ html: 'Successful Delete Employee!' })
+        //     }).catch(() => {
+        //         window.M.toast({ html: "Sorry, You're Offline!" })
+        //     })
     }
 
     componentDidMount() {
@@ -124,6 +185,26 @@ class Employee extends Component {
     handleSubmit = event => {
         event.preventDefault();
 
+        // JSON-Server
+        // if (this.state.isUpdate) {
+        //     const employee = {
+        //         id: this.state.id,
+        //         name: this.state.name,
+        //         job: this.state.job,
+        //         phone: this.state.phone,
+        //     };
+        //     this.putDataEmployee(employee);
+        // } else {
+        //     const employee = {
+        //         id: new Date().getTime(),
+        //         name: this.state.name,
+        //         job: this.state.job,
+        //         phone: this.state.phone,
+        //     };
+        //     this.postDataEmployee(employee);
+        // }
+
+        // Firebase
         if (this.state.isUpdate) {
             this.putDataEmployee();
         } else {
@@ -132,11 +213,6 @@ class Employee extends Component {
 
         let instance = window.M.Sidenav.getInstance(window.Sidenav);
         instance.close();
-    }
-
-    handleDetail = id => {
-        window.EmployeeId = id;
-        this.props.history.push('/detail');
     }
 
     handleAdd = () => {
@@ -257,4 +333,4 @@ class Employee extends Component {
     }
 }
 
-export default withRouter(Employee);
+export default Employee;
