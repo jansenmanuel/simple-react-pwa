@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import API from '../services';
+import { withRouter } from 'react-router-dom';
 import Loader from './Loader';
+import firebase from '../util/firebase';
 
 class Employee extends Component {
     constructor(props) {
@@ -17,48 +17,41 @@ class Employee extends Component {
     }
 
     getDataEmployee = () => {
-        API.getDataEmployee()
-            .then(res => {
-                const employee = res.data
-                this.setState({ employee })
-            })
+        const employeeRef = firebase.database().ref('Employee');
+        employeeRef.on('value', snapshot => {
+            const employees = snapshot.val();
+            const employeeList = [];
+            for (let id in employees) {
+                employeeList.push({ id, ...employees[id] })
+            }
+            this.setState({
+                employee: employeeList
+            });
+        })
     }
 
-    postDataEmployee = employee => {
-        API.postDataEmployee(employee)
-            .then(res => {
-                console.log(res);
-                this.getDataEmployee();
-                this.setState({
-                    name: '',
-                    job: '',
-                    phone: ''
-                })
-                window.M.toast({ html: 'Successful Add New Employee!' })
-            })
+    postDataEmployee = () => {
+        const employeeRef = firebase.database().ref('Employee');
+        const employee = {
+            name: this.state.name,
+            job: this.state.job,
+            phone: this.state.phone,
+        };
+        employeeRef.push(employee);
     }
 
-    putDataEmployee = employee => {
-        API.putDataEmployee(employee, employee.id)
-            .then(res => {
-                console.log(res);
-                this.getDataEmployee();
-                this.setState({
-                    name: '',
-                    job: '',
-                    phone: ''
-                })
-                window.M.toast({ html: 'Successful Edit Employee!' })
-            })
+    putDataEmployee = () => {
+        const employeeRef = firebase.database().ref('Employee').child(this.state.id);
+        employeeRef.update({
+            name: this.state.name,
+            job: this.state.job,
+            phone: this.state.phone,
+        })
     }
 
     deleteDataEmployee = id => {
-        API.deleteDataEmployee(id)
-            .then(res => {
-                console.log(res);
-                this.getDataEmployee();
-                window.M.toast({ html: 'Successful Delete Employee!' })
-            })
+        const employeeRef = firebase.database().ref('Employee').child(id);
+        employeeRef.remove();
     }
 
     componentDidMount() {
@@ -73,21 +66,9 @@ class Employee extends Component {
         event.preventDefault();
 
         if (this.state.isUpdate) {
-            const employee = {
-                id: this.state.id,
-                name: this.state.name,
-                job: this.state.job,
-                phone: this.state.phone,
-            };
-            this.putDataEmployee(employee);
+            this.putDataEmployee();
         } else {
-            const employee = {
-                id: new Date().getTime(),
-                name: this.state.name,
-                job: this.state.job,
-                phone: this.state.phone,
-            };
-            this.postDataEmployee(employee);
+            this.postDataEmployee();
         }
 
         let instance = window.M.Sidenav.getInstance(window.Sidenav);
@@ -95,13 +76,12 @@ class Employee extends Component {
     }
 
     handleDetail = id => {
-        this.props.history.push('/detail');
         window.EmployeeId = id;
+        this.props.history.push('/detail');
     }
 
     handleAdd = () => {
         this.setState({
-            id: '',
             name: '',
             job: '',
             phone: '',

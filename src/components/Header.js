@@ -7,17 +7,19 @@ class Header extends Component {
     render() {
         return (
             <div>
-                <nav className="blue">
-                    <div className="container nav-wrapper">
-                        <Link to="/" className="brand-logo">React PWA</Link>
-                        <a href="!#" data-target="side-menu" className="sidenav-trigger"><i className="material-icons">menu</i></a>
-                        <ul className="right hide-on-med-and-down">
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/about">About</Link></li>
-                            <li><Link to="/detail">Detail</Link></li>
-                        </ul>
-                    </div>
-                </nav>
+                <div className="navbar-fixed">
+                    <nav className="blue">
+                        <div className="container nav-wrapper">
+                            <Link to="/" className="brand-logo">React PWA</Link>
+                            <a href="!#" data-target="side-menu" className="sidenav-trigger"><i className="material-icons">menu</i></a>
+                            <ul className="right hide-on-med-and-down">
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/about">About</Link></li>
+                                <li><Link to="/detail">Detail</Link></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
                 <ul className="sidenav side-nav" id="side-menu">
                     <li>
                         <div className="user-view">

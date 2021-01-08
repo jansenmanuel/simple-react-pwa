@@ -35,6 +35,12 @@
       "name": "Jansen Manuel",
       "job": "Front-end Developer",
       "phone": "081317919123"
+    },
+    {
+      "id": 1610068778573,
+      "name": "Samuel Marsellino",
+      "job": "Back-end Developer",
+      "phone": "085155087716"
     }
   ]
 }

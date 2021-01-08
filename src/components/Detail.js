@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import API from '../services';
 import Loader from './Loader';
+import firebase from '../util/firebase';
 
 class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            employee: []
+            employee: {}
         }
     }
 
     componentDidMount() {
         let id = window.EmployeeId;
-        API.getDetailDataEmployee(id)
-            .then(res => {
-                let employee = res.data;
-                this.setState({ employee })
-            })
+        const employeeRef = firebase.database().ref('Employee').child(id);
+        employeeRef.on('value', snapshot => {
+            const employee = snapshot.val();
+            this.setState({ employee })
+        })
     }
 
     handleBack = () => {
@@ -33,16 +33,13 @@ class Detail extends Component {
                 <span onClick={this.handleBack} style={{ display: "inline-flex", alignItems: "center", cursor: "pointer" }}>
                     <i className="material-icons">keyboard_arrow_left</i> Back
                 </span>
-                {
-                    this.state.employee.map(employee =>
-                        <div className="card blue-grey darken-1" key={employee.id}>
-                            <div className="card-content white-text">
-                                <span className="card-title">{employee.name}</span>
-                                <p>{employee.job}</p>
-                                <p>{employee.phone}</p>
-                            </div>
-                        </div>)
-                }
+                <div className="card blue-grey darken-1" key={this.state.employee.id}>
+                    <div className="card-content white-text">
+                        <span className="card-title">{this.state.employee.name}</span>
+                        <p>{this.state.employee.job}</p>
+                        <p>{this.state.employee.phone}</p>
+                    </div>
+                </div>
             </div>
         );
     }
