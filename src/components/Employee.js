@@ -38,6 +38,7 @@ class Employee extends Component {
             phone: this.state.phone,
         };
         employeeRef.push(employee);
+        window.M.toast({ html: 'Successful Add New Employee!' })
     }
 
     putDataEmployee = () => {
@@ -47,11 +48,13 @@ class Employee extends Component {
             job: this.state.job,
             phone: this.state.phone,
         })
+        window.M.toast({ html: 'Successful Update Employee!' })
     }
 
     deleteDataEmployee = id => {
         const employeeRef = firebase.database().ref('Employee').child(id);
         employeeRef.remove();
+        window.M.toast({ html: 'Successful Delete Employee!' })
     }
 
     componentDidMount() {
