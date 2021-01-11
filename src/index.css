@@ -13,3 +13,27 @@ code {
   border-radius: 10px;
   box-shadow: 2px 2px 5px rgb(200, 200, 200);
 }
+
+.empty {
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  color: #664d03;
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+}
+
+.loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  background-color: #FFFFFF;
+  z-index: 999;
+}

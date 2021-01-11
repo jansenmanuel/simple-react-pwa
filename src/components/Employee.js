@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Loader from './Loader';
 import firebase from '../util/firebase';
+import Empty from './Empty';
 // import API from '../services';
 
 class Employee extends Component {
@@ -242,36 +242,38 @@ class Employee extends Component {
         return (
             <div style={{ marginBottom: "100px" }}>
                 {
-                    this.state.employee.length < 1 && <Loader />
-                }
-                {
-                    this.state.employee.map(employee =>
-                        <ul className="collection card-employee" key={employee.id}>
-                            <li className="collection-item avatar">
-                                <i className="material-icons circle blue">account_circle</i>
-                                <span className="title">{employee.name}</span>
-                                <p>{employee.job}</p>
-                                <p>{employee.phone}</p>
-                                <p className="secondary-content">
-                                    <i
-                                        className="material-icons sidenav-trigger"
-                                        style={{ cursor: "pointer" }}
-                                        data-target="side-form"
-                                        onClick={() => this.handleEdit(employee)}
-                                    >
-                                        edit
-                                    </i>
-                                    <i
-                                        className="material-icons"
-                                        style={{ cursor: "pointer" }}
-                                        onDoubleClick={() => this.handleDelete(employee.id)}
-                                    >
-                                        delete
-                                    </i>
-                                </p>
-                            </li>
-                        </ul>
-                    )
+                    this.state.employee.length < 1 ? <Empty /> :
+                        <div>
+                            {
+                                this.state.employee.map(employee =>
+                                    <ul className="collection card-employee" key={employee.id}>
+                                        <li className="collection-item avatar">
+                                            <i className="material-icons circle blue">account_circle</i>
+                                            <span className="title">{employee.name}</span>
+                                            <p>{employee.job}</p>
+                                            <p>{employee.phone}</p>
+                                            <p className="secondary-content">
+                                                <i
+                                                    className="material-icons sidenav-trigger"
+                                                    style={{ cursor: "pointer" }}
+                                                    data-target="side-form"
+                                                    onClick={() => this.handleEdit(employee)}
+                                                >
+                                                    edit
+                                                </i>
+                                                <i
+                                                    className="material-icons"
+                                                    style={{ cursor: "pointer" }}
+                                                    onDoubleClick={() => this.handleDelete(employee.id)}
+                                                >
+                                                    delete
+                                                </i>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                )
+                            }
+                        </div>
                 }
                 <div id="side-form" className="sidenav side-form">
                     <form className="container" onSubmit={this.handleSubmit}>

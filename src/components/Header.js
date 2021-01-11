@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Jansen from '../assets/jansen.JPG';
 import Background from '../assets/background.jpg';
 
@@ -10,7 +10,8 @@ class Header extends Component {
                 <div className="navbar-fixed">
                     <nav className="blue">
                         <div className="container nav-wrapper">
-                            <Link to="/" className="brand-logo">React PWA</Link>
+                            {/* <Link to="/" className="brand-logo">React PWA</Link> */}
+                            <a href="/" className="brand-logo">React PWA</a>
                             <a href="!#" data-target="side-menu" className="sidenav-trigger"><i className="material-icons">menu</i></a>
                             <ul className="right hide-on-med-and-down">
                                 {/* <li><Link to="/">Home</Link></li>
